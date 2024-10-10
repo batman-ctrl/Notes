@@ -24,7 +24,7 @@ public class AuthService {
         // encrypted password
         String passwordHash = hashPassword(password);
         users.add(new User(username, passwordHash));
-        System.out.println("User registerd successfully");
+        System.out.println("User registered successfully (hash => "+passwordHash+")");
         return  true;
 
     }
@@ -35,7 +35,7 @@ public class AuthService {
         if(user!=null){
             String passwordHash = hashPassword(password);
             if(user.getPasswordHash().equals(passwordHash)){
-                System.out.println("Login successful");
+                System.out.println("Login successful (hash => "+passwordHash+")");
                 return user;
             }
         }

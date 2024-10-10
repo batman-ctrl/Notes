@@ -1,3 +1,4 @@
+import models.Note;
 import models.User;
 import services.AuthService;
 
@@ -52,7 +53,7 @@ public class Main {
                     // is user logged in
                     if(currentUser!=null){
                         // display a menu or something
-                        System.out.print("Dashboard...");
+                        dashboard();
                     }
                     break;
                 case 0:
@@ -92,5 +93,113 @@ public class Main {
         currentUser = authService.login(username, password);
     }
 
+    private static void dashboard(){
+        int choice = 0;
+        while(choice!=5){
+            System.out.println("\n===Dashboard===");
+            System.out.println("1. Create note");
+            System.out.println("2. View note");
+            System.out.println("3. Update note");
+            System.out.println("4. Delete note");
+            System.out.println("5. Logout");
+            System.out.print("Enter your choice: ");
+            choice = readInt();
 
+            switch (choice){
+                case 1:
+                    // create a note
+                    createNote();
+                    break;
+                case 2:
+                    // view my notes
+                    viewNotes();
+                    break;
+                case 3:
+                    updateNote();
+                    break;
+                case 4:
+                    deleteNote();
+                    break;
+                case 5:
+                    //Logout
+                    currentUser = null;
+                    System.out.println("Logged out sucessfully");
+                    break;
+            }
+
+            // escape while loop as well
+            if(currentUser==null){
+                break;
+            }
+        }
+    }
+
+    private static void createNote(){
+        scanner.nextLine();
+        System.out.print("Enter note title: ");
+        String title = scanner.nextLine();
+        System.out.println("Enter note content: ");
+        String content = scanner.nextLine();
+
+        Note note = new Note(title, content);
+        currentUser.addNote(note);
+        System.out.println("Note added successfully!");
+    }
+
+    private static  void viewNotes(){
+        System.out.println("\n===Your Notes===");
+        int index = 0;
+        for(Note note : currentUser.getNotes()){
+            System.out.println("Note ID "+index);
+            note.displayNote();
+            System.out.println("-----------------------");
+            index++;
+        }
+        if(index==0){
+            System.out.println("You have no notes.");
+        }
+    }
+
+    private static void deleteNote(){
+        viewNotes();
+        System.out.print("Enter the Note ID to delte:");
+        int id = readInt();
+
+        if(id>=0 && id<currentUser.getNotes().size()){
+            currentUser.removeNote(id);
+            System.out.println("Note deleted successfully!");
+        }else{
+            System.out.println("Invalid note id");
+        }
+    }
+
+    private static void updateNote(){
+        viewNotes();
+        System.out.print("Enter Note ID to update: ");
+        int id = readInt();
+
+        // if id is valid
+        if(id>=0 && id<currentUser.getNotes().size()){
+
+            Note note = currentUser.getNotes().get(id);
+
+            scanner.nextLine();
+            System.out.print("Enter a new title (leave blank to keep current):");
+            String newtitle = scanner.nextLine();
+            if(!newtitle.isEmpty()){
+                note.setTitle(newtitle);
+            }
+            // if no new title
+            System.out.print("Enter new content (leave blank to keep current):");
+            String newContent = scanner.nextLine();
+            if(!newContent.isEmpty()){
+                note.setContent(newContent);
+            }
+            System.out.println("Note updated successfully!");
+
+        }else{
+            System.out.println("Invalid note Id.");
+        }
+
+    }
 }
