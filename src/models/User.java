@@ -7,10 +7,10 @@ public class User {
     private String passwordHash;
     private ArrayList<Note> notes;
 
-    public User(String username, String passwordHash, ArrayList<Note> notes) {
+    public User(String username, String passwordHash) {
         this.username = username;
         this.passwordHash = passwordHash;
-        this.notes = notes;
+        this.notes = new ArrayList<>();
     }
 
     public void setUsername(String username) {
@@ -19,6 +19,18 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public ArrayList<Note> getNotes() {
+        return notes;
     }
 
     public void setNotes(ArrayList<Note> notes) {
